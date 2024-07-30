@@ -8,7 +8,7 @@ import CourseRoutes from "./Kanbas/Courses/routes.js";
 import ModuleRoutes from "./Kanbas/Modules/routes.js";
 import AssignmentRoutes from "./Kanbas/Assignments/routes.js";
 import cors from "cors";
-const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb+srv://siyil718sl:DEboKoZsCBnprA0c@kanbas.olmem1g.mongodb.net/?retryWrites=true&w=majority&appName=Kanbas"
+const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb+srv://siyil718sl:DEboKoZsCBnprA0c@kanbas.olmem1g.mongodb.net/kanbas?retryWrites=true&w=majority&appName=Kanbas&ssl=true"
 mongoose.connect(CONNECTION_STRING);
 const app = express();
 app.use(cors()); 
