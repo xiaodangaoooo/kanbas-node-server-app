@@ -10,16 +10,30 @@ import AssignmentRoutes from "./Kanbas/Assignments/routes.js";
 import cors from "cors";
 import session from "express-session";
 
-const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kanbas"
-mongoose.connect(CONNECTION_STRING);
 const app = express();
+const allowedOrigins = [
+  "https://a6--animated-banoffee-432260.netlify.app",
+  "http://localhost:3000" 
+];
+
 app.use(
   cors({
     credentials: true,
-    origin: "https://a6--animated-banoffee-432260.netlify.app",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
 
+app.options('*', cors());
+const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kanbas"
+mongoose.connect(CONNECTION_STRING);
 const sessionOptions = {                           
   secret: process.env.SESSION_SECRET || "kanbas",
   resave: false,
