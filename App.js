@@ -11,15 +11,8 @@ import cors from "cors";
 import session from "express-session";
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kanbas"
-mongoose.connect(CONNECTION_STRING)
-  .then(() => {
-    console.log("Connected to MongoDB");
-    console.log("Database Name:", mongoose.connection.name);
-    console.log("Host:", mongoose.connection.host);
-    console.log("Port:", mongoose.connection.port);
-  })
-  .catch(err => console.error("MongoDB connection error:", err));
-  const app = express();
+mongoose.connect(CONNECTION_STRING);
+const app = express();
 app.use(
   cors({
     credentials: true,
