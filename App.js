@@ -1,17 +1,40 @@
 import "dotenv/config";
 import express from 'express';
 import mongoose from "mongoose";
-import UserRoutes from "./Users/routes.js";
+import UserRoutes from "./Kanbas/Users/routes.js"
 import Hello from "./Hello.js";
 import Lab5 from "./Lab5/index.js";
 import CourseRoutes from "./Kanbas/Courses/routes.js";
 import ModuleRoutes from "./Kanbas/Modules/routes.js";
 import AssignmentRoutes from "./Kanbas/Assignments/routes.js";
 import cors from "cors";
+import session from "express-session";
+
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kanbas"
-mongoose.connect(CONNECTION_STRING);
-const app = express();
-app.use(cors()); 
+mongoose.connect(CONNECTION_STRING)
+  .then(() => {
+    console.log("Connected to MongoDB");
+    console.log("Database Name:", mongoose.connection.name);
+    console.log("Host:", mongoose.connection.host);
+    console.log("Port:", mongoose.connection.port);
+  })
+  .catch(err => console.error("MongoDB connection error:", err));
+  const app = express();
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.NETLIFY_URL || "http://localhost:3000",
+  })
+);
+
+const sessionOptions = {                           
+  secret: process.env.SESSION_SECRET || "kanbas",
+  resave: false,
+  saveUninitialized: false,
+};
+
+app.use(session(sessionOptions));
+
 app.use(express.json());
 UserRoutes(app);
 ModuleRoutes(app);
